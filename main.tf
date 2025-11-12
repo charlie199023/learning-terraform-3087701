@@ -1,24 +1,22 @@
-data "aws_ami" "app_ami" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["bitnami-tomcat-*-x86_64-hvm-ebs-nami"]
+terraform {
+  required_version = ">= 1.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
   }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["979382823631"] # Bitnami
 }
 
-resource "aws_instance" "blog" {
-  ami           = data.aws_ami.app_ami.id
+provider "aws" {
+  region = "us-east-1"  # Change if you want a different region
+}
+
+resource "aws_instance" "web" {
+  ami           = "ami-0c2b8ca1dad447f8a"  # Amazon Linux 2 Free Tier AMI in us-east-1
   instance_type = var.instance_type
 
   tags = {
-    Name = "HelloWorld"
+    Name = "FreeTierWebServer"
   }
 }
